@@ -78,4 +78,37 @@ public class ScheduleService {
         return dtos;
     }
 
+    //수정
+    @Transactional
+    public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto request) {
+        //더티 체킹
+        //DB에서 일치하는 스케줄을 가져온다.
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                ()->new IllegalArgumentException("없는 스케줄 입니다.")//값이 없다면 오류 출력
+        );
+        if(!schedule.getPassword().equals(request.getPassword())) {//패스워드가 일치하지 않으면 오류출력
+            //DB에 있는 패스워드와 입력한 패스워드가 일치하는지
+            throw new IllegalArgumentException("패스워드가 일치하지 않습니다.");
+        }else{//일치하면 업데이트 실시
+            schedule.update(
+                    request.getTitle(),
+                    request.getContent()
+            );
+        }
+        return new ScheduleResponseDto(schedule);
+    }
+
+    //삭제
+    @Transactional
+    public void deleteSchedule(Long scheduleId, ScheduleRequestDto request) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                ()->new IllegalArgumentException("없는 스케줄 입니다.")//값이 없다면 오류 출력
+        );
+        if(schedule.getPassword().equals(request.getPassword())) {
+            //스케줄이 있고, 패스워드가 일치하는 경우->삭제가 가능하다
+            scheduleRepository.deleteById(scheduleId);
+        }else{//스케줄은 있으나 패스워드가 일치하지 않는경우
+            throw new IllegalArgumentException("패스워드가 일치 하지 않습니다.");
+        }
+    }
 }

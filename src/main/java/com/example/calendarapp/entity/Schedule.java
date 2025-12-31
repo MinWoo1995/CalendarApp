@@ -43,4 +43,10 @@ public class Schedule {
 //        @LocalDateTime
 //        this.updateAt = LocalDateTime.now();
     }
+
+    //업데이트는 프레임워크에게 맡기는게 아닌, 개발자의 의도와 더티체킹, 캡슐화 목적으로 업데이트 메서드는 직접 구현
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

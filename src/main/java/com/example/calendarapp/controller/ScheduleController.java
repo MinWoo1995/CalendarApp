@@ -43,6 +43,7 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
         //body(result)결과물을 status(HttpStatus.OK)를 표시하여 ResponseEntity봉투에 담아 클라이언트에세 응답을 줘라
     }
+
     //스케줄 다건 조회(생성자 이름 기준으로)
     @GetMapping
     //[문제] @GetMapping("/search/{username}") 작성해두고 @RequestParam(required = false) 이렇게 처리를 요구함
@@ -55,5 +56,23 @@ public class ScheduleController {
     )
     {
         return scheduleService.getUserNameSchedule(username);
+    }
+
+    //스케줄 수정
+    @PutMapping("/{scheduleId}") // 수정을 원하는 일정의 ID를 경로로 받음
+    public ScheduleResponseDto updateSchedule(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleRequestDto request // 수정할 내용 + 비밀번호를 Body로 받음
+    ) {
+        return scheduleService.updateSchedule(scheduleId, request);
+    }
+
+    //스케줄 삭제
+    @DeleteMapping("/{scheduleId}")
+    public void deleteSchedule(
+            @PathVariable Long scheduleId,
+            @RequestBody ScheduleRequestDto request //비밀번호를 Body로 받음
+    ){
+        scheduleService.deleteSchedule(scheduleId,request);
     }
 }
