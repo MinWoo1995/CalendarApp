@@ -14,6 +14,7 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;//창고 관리자 호출
 
+    //생성
     @Transactional//트렌젝션 단위로 묶기
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
         // 1. [요리 시작] 사용자가 준 접시(DTO)에서 재료를 꺼내 실제 식재료(Entity)를 만듭니다.
@@ -30,5 +31,13 @@ public class ScheduleService {
         // 3. [서빙 준비] 완성된 식재료를 다시 예쁜 접시(Response DTO)에 담아 매니저(Controller)에게 전달합니다.
         return new ScheduleResponseDto(savedSchedule);
     };
+    //단건조회
+    @Transactional(readOnly = true)
+    public ScheduleResponseDto getOneSchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                ()->new IllegalArgumentException("해당하는 스케줄이 없습니다.")
+        );
+        return new ScheduleResponseDto(schedule);
+    }
 
 }
