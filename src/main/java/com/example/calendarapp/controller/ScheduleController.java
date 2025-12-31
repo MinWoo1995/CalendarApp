@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController // JSON 형태로 응답을 보낼 때 사용//클라이언트가 제이슨으로 받아야 구현이 가능하기 때문
 @RequestMapping("/api/schedules") // 공통 경로 설정//외부에서 api를 접근하는 경로(여기로 보내 주세요)
 @RequiredArgsConstructor // 생성자 주입을 위해 사용 (Service 연결용)//new없이 사용하기위해서
@@ -40,6 +42,18 @@ public class ScheduleController {
         //scheduleService 클래스에 getOneSchedule메서드를 scheduleId값을 넣어 실행하고 결과를 result에 담아라
         return ResponseEntity.status(HttpStatus.OK).body(result);
         //body(result)결과물을 status(HttpStatus.OK)를 표시하여 ResponseEntity봉투에 담아 클라이언트에세 응답을 줘라
-
+    }
+    //스케줄 다건 조회(생성자 이름 기준으로)
+    @GetMapping
+    //[문제] @GetMapping("/search/{username}") 작성해두고 @RequestParam(required = false) 이렇게 처리를 요구함
+    //그래서 포스트맨 테스트시 404에러 발생
+    //[해결]("/search/{username}") 지우고, 포스트맨 호출 주소값을
+    //http://localhost:8080/api/schedules?username=전민우 (이름이 있는경우)
+    //http://localhost:8080/api/schedules(이름이 없는경우)로 해결을 완료
+    public List<ScheduleResponseDto> getFindUserNameSchedule(
+            @RequestParam(required = false) String username//이름이 없어도 에러가 나지 않도록 처리
+    )
+    {
+        return scheduleService.getUserNameSchedule(username);
     }
 }
