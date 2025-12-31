@@ -40,5 +40,6 @@ public class ScheduleController {
         //scheduleService 클래스에 getOneSchedule메서드를 scheduleId값을 넣어 실행하고 결과를 result에 담아라
         return ResponseEntity.status(HttpStatus.OK).body(result);
         //body(result)결과물을 status(HttpStatus.OK)를 표시하여 ResponseEntity봉투에 담아 클라이언트에세 응답을 줘라
+
     }
 }
