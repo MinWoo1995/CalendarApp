@@ -1,8 +1,11 @@
 package com.example.calendarapp.service;
 
+import com.example.calendarapp.dto.CommentResponseDto;
 import com.example.calendarapp.dto.ScheduleRequestDto;
 import com.example.calendarapp.dto.ScheduleResponseDto;
+import com.example.calendarapp.entity.Comment;
 import com.example.calendarapp.entity.Schedule;
+import com.example.calendarapp.repository.CommentRepository;
 import com.example.calendarapp.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
@@ -19,6 +22,7 @@ import static aQute.bnd.annotation.headers.Category.users;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;//창고 관리자 호출
+    private final CommentRepository commentRepository;
 
     //생성
     @Transactional//트렌젝션 단위로 묶기
@@ -35,15 +39,23 @@ public class ScheduleService {
                 Schedule savedSchedule = scheduleRepository.save(schedule);
 
         // 3. [서빙 준비] 완성된 식재료를 다시 예쁜 접시(Response DTO)에 담아 매니저(Controller)에게 전달합니다.
-        return new ScheduleResponseDto(savedSchedule);
+        return new ScheduleResponseDto(savedSchedule,new ArrayList<>());//빈리스트 반환으로 타입형태 맞춰주기
     };
     //단건 조회
     @Transactional(readOnly = true)
     public ScheduleResponseDto getOneSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                ()->new IllegalArgumentException("해당하는 스케줄이 없습니다.")
+                ()->new IllegalArgumentException("해당하는 스케줄이 없습니다.")//일정이 없으면
         );
-        return new ScheduleResponseDto(schedule);
+        //comment 엔티티 리스트 가져오기
+        List<Comment> commentsList = commentRepository.findByScheduleId(scheduleId);
+
+        //엔티티 리스트를 하나씩 꺼내어서 DTO 타입으로 변환하여 리스트 다시만들기
+        List<CommentResponseDto> commentResponseDtos = commentsList.stream()
+                .map(comment->new CommentResponseDto(comment))
+                .toList();
+        //합쳐서 반환
+        return new ScheduleResponseDto(schedule, commentResponseDtos);
     }
     //다건 조회
     @Transactional(readOnly = true)
@@ -58,12 +70,12 @@ public class ScheduleService {
         if(username != null) {//이름이 널이 아니면 로직을 실행해라
             for (Schedule schedule : allSchedules) {//allSchedules든 내용을 하나씩 꺼내서 schedule여기에 잠시담아서 로직 수행
                 if (schedule.getUsername().equals(username)) { // 이름이 같으면
-                    dtos.add(new ScheduleResponseDto(schedule)); // 접시에 담기
+                    dtos.add(new ScheduleResponseDto(schedule,new ArrayList<>())); // 접시에 담기
                 }
             }
         }else{//이름이 없으면 입력하라고 해
             for (Schedule schedule : allSchedules) {
-                dtos.add(new ScheduleResponseDto(schedule)); // 접시에 담기
+                dtos.add(new ScheduleResponseDto(schedule,new ArrayList<>())); // 접시에 담기
             }
             dtos.sort((a, b) -> b.getUpdatedAt().compareTo(a.getUpdatedAt()));
             //b의 시간이 a보다 뒤면 앞으로 보내[이게 제일 어려웠다......]
@@ -95,7 +107,10 @@ public class ScheduleService {
                     request.getContent()
             );
         }
-        return new ScheduleResponseDto(schedule);
+        return new ScheduleResponseDto(schedule,new ArrayList<>());
+        //[문제] 단건조회 수정후 컴파일러 에러가 연속적으로 발생
+        //[해결]단건조희시 해당 일정의 댓글까지 보여지게 수정하면서, ScheduleResponseDto의 반환 타입이 추가되어, 추가된 타입의 형태를
+        //없는경우 빈리스트로 반환하여, 타입을 충족시키게 해서 오류들을 해결
     }
 
     //삭제
