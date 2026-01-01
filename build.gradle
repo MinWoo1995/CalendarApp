@@ -25,6 +25,9 @@ repositories {
 }
 
 dependencies {
+    //@Size 같은 어노테이션 사용할려면 해당 라이브러리를 추가해줘야한다.
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
     compileOnly 'org.projectlombok:lombok'

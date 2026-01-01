@@ -23,10 +23,35 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;//창고 관리자 호출
     private final CommentRepository commentRepository;
+    //검증
+    private void validateScheduleRequest(ScheduleRequestDto dto) {
+        // 필수값(NotBlank) 검증
+        if (dto.getTitle() == null || dto.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("제목은 필수입니다.");
+        }
+        if (dto.getContent() == null || dto.getContent().trim().isEmpty()) {
+            throw new IllegalArgumentException("내용은 필수입니다.");
+        }
+        if (dto.getPassword() == null || dto.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("패스워드를 입력해주세요");
+        }
+        if (dto.getUsername() == null || dto.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("작성자명을 입력해주세요");
+        }
+
+        // 글자수(Size) 검증
+        if (dto.getTitle().length() > 30) {
+            throw new IllegalArgumentException("제목은 최대 30자 이내여야 합니다.");
+        }
+        if (dto.getContent().length() > 200) {
+            throw new IllegalArgumentException("내용은 최대 200자 이내여야 합니다.");
+        }
+    }
 
     //생성
     @Transactional//트렌젝션 단위로 묶기
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
+        validateScheduleRequest(requestDto);//검증
         // 1. [요리 시작] 사용자가 준 접시(DTO)에서 재료를 꺼내 실제 식재료(Entity)를 만듭니다.
         Schedule schedule = new Schedule(
                 requestDto.getTitle(),
@@ -93,6 +118,7 @@ public class ScheduleService {
     //수정
     @Transactional
     public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto request) {
+        validateScheduleRequest(request);//검증
         //더티 체킹
         //DB에서 일치하는 스케줄을 가져온다.
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(

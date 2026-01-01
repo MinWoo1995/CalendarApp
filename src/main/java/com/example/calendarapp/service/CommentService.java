@@ -18,9 +18,29 @@ public class CommentService {
     private final CommentRepository commentRepository;//댓글 창고 관리자 호출
     private final ScheduleRepository scheduleRepository;//일정 창고 관리자 호출
 
+    //검증
+    private void validateCommentRequest(CommentRequestDto dto) {
+        // 필수값(NotBlank) 검증
+        if (dto.getContent() == null || dto.getContent().trim().isEmpty()) {
+            throw new IllegalArgumentException("내용은 필수입니다.");
+        }
+        if (dto.getPassword() == null || dto.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("패스워드를 입력해주세요");
+        }
+        if (dto.getUsername() == null || dto.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("작성자명을 입력해주세요");
+        }
+
+        // 글자수(Size) 검증
+        if (dto.getContent().length() > 100) {
+            throw new IllegalArgumentException("내용은 최대 100자 이내여야 합니다.");
+        }
+    }
+
     //댓글 생성
     @Transactional//트렌젝션 단위로 묶기
     public CommentResponseDto saveComment(CommentRequestDto requestDto) {
+        validateCommentRequest(requestDto);//검증
 
         //댓글 달기전에 해당 일정이 있는지 확인하기
         scheduleRepository.findById(requestDto.getScheduleId()).orElseThrow(
