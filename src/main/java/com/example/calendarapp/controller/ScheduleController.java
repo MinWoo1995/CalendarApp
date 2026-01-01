@@ -53,8 +53,7 @@ public class ScheduleController {
     //http://localhost:8080/api/schedules(이름이 없는경우)로 해결을 완료
     public List<ScheduleResponseDto> getFindUserNameSchedule(
             @RequestParam(required = false) String username//이름이 없어도 에러가 나지 않도록 처리
-    )
-    {
+    ){
         return scheduleService.getUserNameSchedule(username);
     }
 
@@ -63,7 +62,7 @@ public class ScheduleController {
     public ScheduleResponseDto updateSchedule(
             @PathVariable Long scheduleId,
             @RequestBody ScheduleRequestDto request // 수정할 내용 + 비밀번호를 Body로 받음
-    ) {
+    ){
         return scheduleService.updateSchedule(scheduleId, request);
     }
 
