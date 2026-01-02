@@ -93,3 +93,24 @@ modified_at: Datetime
 
 특징 : URL에 데이터가 보이지 않아 보안상 유리, 객체(DTO)로 바로 변환
 
+<실 행 결 과>
+일정 등록
+<img width="1253" height="751" alt="image" src="https://github.com/user-attachments/assets/d294337b-1226-4037-af4b-3ec063595986" />
+댓글 생성 11번째 실패
+<img width="1273" height="752" alt="image" src="https://github.com/user-attachments/assets/8dad5d87-861e-4651-9afe-1d9b00b1be85" />
+<img width="1243" height="258" alt="image" src="https://github.com/user-attachments/assets/b1b8ee23-de49-4764-b9f8-59886c582121" />
+단건 조회 (단건 조회시 관련 댓글도 함께 응답)
+<img width="1280" height="666" alt="image" src="https://github.com/user-attachments/assets/aa1e18db-0a57-42ee-8f3b-c30ffbf9125c" />
+<img width="1280" height="661" alt="image" src="https://github.com/user-attachments/assets/b4f55d2c-ac49-449b-ac7b-fe31d72954bb" />
+다건 조회 (이름으로 조회시 내림차순 정렬)
+<img width="1280" height="661" alt="image" src="https://github.com/user-attachments/assets/3ec86cdd-65f6-4e68-8641-73bd92dca96b" />
+다건 조회 (이름이 없는경우)
+<img width="1280" height="657" alt="image" src="https://github.com/user-attachments/assets/bf1b9c67-92aa-4300-8a4d-d3d38deaa8e2" />
+수정
+<img width="1280" height="658" alt="image" src="https://github.com/user-attachments/assets/8c951f73-b233-4c97-918b-73ff311c68b7" />
+삭제
+<img width="1280" height="661" alt="image" src="https://github.com/user-attachments/assets/81dfb7dd-fad6-41de-91a0-cd72c158d3d6" />
+
+
+
+
