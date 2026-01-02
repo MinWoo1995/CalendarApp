@@ -24,6 +24,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;//창고 관리자 호출
     private final CommentRepository commentRepository;
     //Request 와 DB에 2중으로 검증 구현
+    //아래 로직을 살려서 3중으로 검증을 구현할수 있지만. 유지보수 측면에서는 어노테이션을 활용한 2군데에서만 검증하는걸로
     /*
     //검증
     private void validateScheduleRequest(ScheduleRequestDto dto) {
