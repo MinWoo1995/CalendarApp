@@ -42,10 +42,16 @@ public class CommentService {
     public CommentResponseDto saveComment(CommentRequestDto requestDto) {
         validateCommentRequest(requestDto);//검증
 
-        //댓글 달기전에 해당 일정이 있는지 확인하기
+        //아이디만 확인하고 끝나는게 아니라, 실제 Schedule 객체를 가져온다
+        Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId()).orElseThrow(
+                ()-> new IllegalArgumentException("해당 일정이 존재하지 않습니다.")
+        );
+
+        /*//댓글 달기전에 해당 일정이 있는지 확인하기
         scheduleRepository.findById(requestDto.getScheduleId()).orElseThrow(
                 () ->new IllegalArgumentException("해당 일정이 존재하지 않습니다.")
-        );
+        );*/
+
         //해당 일정에 댓글이 10개 미만인지 확인하기
         Long count = commentRepository.countByScheduleId(requestDto.getScheduleId());
         if (count >= 10) {
@@ -57,7 +63,7 @@ public class CommentService {
                 requestDto.getContent(),
                 requestDto.getUsername(),
                 requestDto.getPassword(),
-                requestDto.getScheduleId()
+                schedule//객체 자체를 넘기는걸로 변경
         );
         // 2. [창고 저장] 창고 관리자에게 식재료를 보관하라고 시킵니다.
         // 이때 DB가 ID와 생성/수정 시간을 자동으로 채워준 완성본을 돌려줍니다.

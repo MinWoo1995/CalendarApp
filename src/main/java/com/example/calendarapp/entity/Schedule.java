@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +27,12 @@ public class Schedule {
     private String content;
     private String username;
     private String password;
+
+    //일대다 설정
+    //Schedule 엔티티는 Comment 엔티티를 Owner 로 인식
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     @CreatedDate
     @Column(updatable = false)//생성일은 수정될수 없다
     private LocalDateTime createdAt;

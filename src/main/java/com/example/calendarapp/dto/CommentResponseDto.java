@@ -20,6 +20,11 @@ public class CommentResponseDto {
         this.username = comment.getUsername();
         this.createdAt = comment.getCreatedAt();
         this.updatedAt = comment.getUpdatedAt();
-        this.scheduleId= comment.getScheduleId();
+        //this.scheduleId= comment.getScheduleId();
+
+        //Comment에 scheduleId라는 필드가 없음으로, 연결된 schedule 객체에서 Id를 가져온다
+        if(comment.getSchedule() != null) {
+            this.scheduleId = comment.getSchedule().getId();
+        }
     }
 }
