@@ -23,9 +23,17 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    // 1. 제목: 필수(nullable=false), 길이 30자(length=30)
+    @Column(nullable = false, length = 30)
     private String title;
+    // 2. 내용: 필수, 길이 200자
+    @Column(nullable = false, length = 200)
     private String content;
+    // 3. 작성자명: 필수
+    @Column(nullable = false)
     private String username;
+    // 4. 비밀번호: 필수
+    @Column(nullable = false)
     private String password;
 
     //일대다 설정

@@ -17,8 +17,12 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String content;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
     //private Long scheduleId;
     @ManyToOne(fetch = FetchType.LAZY)//다대일 설정
@@ -27,9 +31,6 @@ public class Comment {
     @JoinColumn(name = "schedule_id") // DB 테이블에 생길 외래키 컬럼명
     private Schedule schedule;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
-    @LastModifiedDate
     @CreatedDate
     @Column(updatable = false)//생성일은 수정될수 없다
     private LocalDateTime createdAt;

@@ -18,6 +18,7 @@ public class CommentService {
     private final CommentRepository commentRepository;//댓글 창고 관리자 호출
     private final ScheduleRepository scheduleRepository;//일정 창고 관리자 호출
 
+    /*
     //검증
     private void validateCommentRequest(CommentRequestDto dto) {
         // 필수값(NotBlank) 검증
@@ -36,11 +37,12 @@ public class CommentService {
             throw new IllegalArgumentException("내용은 최대 100자 이내여야 합니다.");
         }
     }
+     */
 
     //댓글 생성
     @Transactional//트렌젝션 단위로 묶기
     public CommentResponseDto saveComment(CommentRequestDto requestDto) {
-        validateCommentRequest(requestDto);//검증
+        //validateCommentRequest(requestDto);//검증
 
         //아이디만 확인하고 끝나는게 아니라, 실제 Schedule 객체를 가져온다
         Schedule schedule = scheduleRepository.findById(requestDto.getScheduleId()).orElseThrow(

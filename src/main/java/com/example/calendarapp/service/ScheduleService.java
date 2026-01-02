@@ -23,6 +23,8 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;//창고 관리자 호출
     private final CommentRepository commentRepository;
+    //Request 와 DB에 2중으로 검증 구현
+    /*
     //검증
     private void validateScheduleRequest(ScheduleRequestDto dto) {
         // 필수값(NotBlank) 검증
@@ -47,11 +49,12 @@ public class ScheduleService {
             throw new IllegalArgumentException("내용은 최대 200자 이내여야 합니다.");
         }
     }
+    */
 
     //생성
     @Transactional//트렌젝션 단위로 묶기
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
-        validateScheduleRequest(requestDto);//검증
+        //validateScheduleRequest(requestDto);//검증
         // 1. [요리 시작] 사용자가 준 접시(DTO)에서 재료를 꺼내 실제 식재료(Entity)를 만듭니다.
         Schedule schedule = new Schedule(
                 requestDto.getTitle(),
@@ -118,7 +121,7 @@ public class ScheduleService {
     //수정
     @Transactional
     public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto request) {
-        validateScheduleRequest(request);//검증
+        //validateScheduleRequest(request);//검증
         //더티 체킹
         //DB에서 일치하는 스케줄을 가져온다.
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
